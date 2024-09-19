@@ -5,10 +5,12 @@ Este programa en C++ se encarga de gestionar, organizar y anlizar datos economic
 El usuario puede interactuar con el programa seleccionando que datos desea visualizar. Los resultados se presentan de manera ordenada de menor a mayor, segun la opcion elegida, facilitando asi la comparacion y el analisis de la informacion. 
 
 ## Avance 1
-Para este primer avance solo tengo un vector que tiene algunos estados con sus datos (no los tengo todos, necesito revisar y confirmar parte de la informacion que encontre en linea), tiene el algoritmo de ordenamiento (Quick sort debido a qie es eficiente para grandes conjuntos de datos y su rendimiento promedio es de O(nlogn)), y las opciones de las que se puede elegir (planeo agregarle mas opciones). Otra modificacion que quiero ahcer es solo mostrar el estado y el dato solicitado en vez de toda la linea de datos.
+Para este primer avance utilice la funcion sort para ordanarlos datos (en los archivos que se llaman Ordenamiento.h y el main.cpp) lo hice mas que nada para experiemtnar como funciona esta funcion pero tambien utilice el QuickSort en el archivo EstadosQuickSort.h
+
+Utilice un vector que tiene todos los estados de la republica con sus datos (necesito revisar y confirmar parte de la informacion que encontre en linea especialmente la parte de los sectores a los que se encarga cada estado por lo que no lo aplique ente avance), tiene el algoritmo de ordenamiento (Quick sort debido a que es eficiente para grandes conjuntos de datos y su rendimiento promedio es de O(nlogn)), y las opciones de las que se puede elegir (planeo agregarle mas opciones). Otra modificacion que quiero hacer es solo mostrar el estado y el dato solicitado en vez de toda la linea de datos.
 
 ## Uso
-Solo se selecciona el numero de la opcion en la que se quiere ordenar los datos y el programa hace el resto.
+En cualquiera de las dos opciones del programa que se escoga solo se selecciona el numero de la opcion en la que se quiere ordenar los datos y el programa los ordena con la funcion o con el algoritmo (dependiendo del archivo) y se muestran ya ordenados.
 
 ## Sub-competencias
 ### SICT0301: Evalúa los componentes
