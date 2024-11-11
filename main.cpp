@@ -1,77 +1,281 @@
 #include <iostream>
-#include <vector> 
+#include <vector>
 #include <algorithm>
+#include <cmath>
+#include <map>
+#include <fstream>
+#include <sstream>
 #include <string>
-
-#include"Ordenamiento.h"
 
 using namespace std;
 
+//estructura datos estado
+struct Estado {
+    string nombre;               //Nombre
+    int indice;                  //indice
+    double produccionEconomica;  //produccion economica en millones de US
+    int poblacion;               //poblacion
+    int sector;                  //sectore economico
+
+    //imprimir info estado en archivo
+    void imprimir(ofstream& outputFile) const {
+        outputFile << nombre << " - Producción Económica: " << produccionEconomica << " millones de US\n";
+    }
+
+    //imprimir infor estado en consola
+    void imprimir(ostream& os) const {
+        os << nombre << " - Producción Económica: " << produccionEconomica << " millones de US\n";
+    }
+};
+
+//leer datos desde archivo de texto
+bool leerDatosDesdeArchivo(const string& archivo, vector<Estado>& estados) {
+    ifstream inputFile(archivo);  //abrimosarchivo en modo lectura
+    if (!inputFile) {  //si no se pudo abrir el archivo, mostramos error
+        cout << "No se pudo abrir el archivo " << archivo << endl;
+        return false;
+    }
+
+    string linea;
+    while (getline(inputFile, linea)) {  //leemos linea por linea
+        stringstream ss(linea);  //creamos un stringstream para separar cada línea por comas
+        Estado estado;
+        string campo;
+
+        //leemos cada campo y los asignamos a las variables del struct
+        getline(ss, estado.nombre, ',');
+        getline(ss, campo, ',');
+        estado.indice = stoi(campo);  //convertimos el campo a entero
+        getline(ss, campo, ',');
+        estado.produccionEconomica = stod(campo);  //convertimos a double
+        getline(ss, campo, ',');
+        estado.poblacion = stoi(campo);  //convertimos a entero
+        getline(ss, campo, ',');
+        estado.sector = stoi(campo);  //convertimos a entero
+
+        estados.push_back(estado);  //agregamos el estado al vector
+    }
+
+    inputFile.close();  //cerramos el archivo
+    return true;
+}
+
+//guardar resultados en un archivo
+void guardarResultados(const string& archivo, const vector<Estado>& estados, int opcion, double resultado) {
+    ofstream outputFile(archivo, ios::app);  //abrimos el archivo en modo append
+
+    if (!outputFile) {  //si no se pudo abrir el archivo, mostramos error
+        cout << "No se pudo abrir el archivo " << archivo << endl;
+        return;
+    }
+
+    //dependiendo de eleccion guardamos el resultado
+    switch (opcion) {
+        case 4:
+            outputFile << "Media: " << resultado << "\n\n";
+            break;
+        case 5:
+            outputFile << "Mediana: " << resultado << "\n\n";
+            break;
+        case 6:
+            outputFile << "Moda: " << resultado << "\n\n";
+            break;
+        case 7:
+            outputFile << "Rango de Variación: " << resultado << "\n\n";
+            break;
+        case 8:
+            outputFile << "Varianza: " << resultado << "\n\n";
+            break;
+        case 9:
+            outputFile << "Desviación Estándar: " << resultado << "\n\n";
+            break;
+        case 10:
+            outputFile << "Coeficiente de Variación: " << resultado << "%\n\n";
+            break;
+        default:
+            break;
+    }
+
+    //si se ha ordenado guardamos los resultados
+    if (opcion >= 1 && opcion <= 3) {
+        outputFile << "\nDatos ordenados:\n";
+        for (const auto& estado : estados) {
+            estado.imprimir(outputFile);
+        }
+        outputFile << "\n";  //linea en blanco al final
+    }
+
+    outputFile.close();
+}
+
+//media
+double calcularMedia(const vector<Estado>& estados) {
+    double suma = 0;
+    for (const auto& estado : estados) {
+        suma += estado.produccionEconomica;
+    }
+    return suma / estados.size();
+}
+
+//mediana
+double calcularMediana(vector<Estado>& estados) {
+    //ordenamos produccion economica
+    sort(estados.begin(), estados.end(), [](const Estado& a, const Estado& b) {
+        return a.produccionEconomica < b.produccionEconomica;
+    });
+
+    int n = estados.size();
+    if (n % 2 == 0) {  //si num de elementos es par
+        return (estados[n / 2 - 1].produccionEconomica + estados[n / 2].produccionEconomica) / 2.0;
+    } else {  //si impar
+        return estados[n / 2].produccionEconomica;
+    }
+}
+
+//moda
+double calcularModa(const vector<Estado>& estados) {
+    map<double, int> frecuencias;
+    //contamos veces roduccion economica
+    for (const auto& estado : estados) {
+        frecuencias[estado.produccionEconomica]++;
+    }
+
+    double moda = 0;
+    int maxFrecuencia = 0;
+    //buscamos num con mayor frecuencia
+    for (const auto& [valor, frecuencia] : frecuencias) {
+        if (frecuencia > maxFrecuencia) {
+            maxFrecuencia = frecuencia;
+            moda = valor;
+        }
+    }
+    return moda;
+}
+
+//rango de variacion
+double calcularRango(const vector<Estado>& estados) {
+    double minValor = estados[0].produccionEconomica;
+    double maxValor = estados[0].produccionEconomica;
+    for (const auto& estado : estados) {
+        if (estado.produccionEconomica < minValor) minValor = estado.produccionEconomica;
+        if (estado.produccionEconomica > maxValor) maxValor = estado.produccionEconomica;
+    }
+    return maxValor - minValor;
+}
+
+//varianza
+double calcularVarianza(const vector<Estado>& estados) {
+    double media = calcularMedia(estados);
+    double suma = 0;
+    for (const auto& estado : estados) {
+        suma += pow(estado.produccionEconomica - media, 2);
+    }
+    return suma / estados.size();
+}
+
+//desviacion estandar
+double calcularDesviacionEstandar(const vector<Estado>& estados) {
+    return sqrt(calcularVarianza(estados));
+}
+
+//coeficiente de variacion
+double calcularCoeficienteVariacion(const vector<Estado>& estados) {
+    double media = calcularMedia(estados);
+    double desviacion = calcularDesviacionEstandar(estados);
+    return (desviacion / media) * 100;
+}
+
+//produccion economica
+bool compararPorProduccionEconomica(const Estado& a, const Estado& b) {
+    return a.produccionEconomica < b.produccionEconomica;
+}
+
+//ordenar por poblacion
+bool compararPorPoblacion(const Estado& a, const Estado& b) {
+    return a.poblacion < b.poblacion;
+}
+
+//ordenar por sector
+bool compararPorSector(const Estado& a, const Estado& b) {
+    return a.sector < b.sector;
+}
+
+//MAIN//
+
 int main() {
-    vector<Estado> estados = { //creacion del vector de los Estados con nombre, indice, produccion economica (exportaciones por millones de US), poblacion, sector de actividad en numero
-        {"Aguascalientes", 1, 31090, 1425607, 0}, //manufactura 5
-        {"Baja California", 2, 52523, 3769020, 0}, // comercio al por menor
-        {"Baja California Sur", 3, 519, 798447, 0}, //agricola
-        {"Campeche", 4, 19074, 928363, 0}, //
-        {"Chiapas", 5, 1462, 5543828, 0}, //
-        {"Chihuahua", 6, 76580, 3741869, 0}, //
-        {"CDMX", 7, 3518, 9209944, 0}, //
-        {"Coahuila", 8, 60014, 3146771, 0}, //
-        {"Colima", 9, 1111, 731391, 0}, //
-        {"Durango", 10, 3027, 1832650, 0}, //
-        {"Estado de Mexico", 11, 20457, 16992418, 0}, //
-        {"Guanajuato", 12, 31754, 6166934, 0}, //
-        {"Guerrero", 13, 1137, 3540685, 0}, //
-        {"Hidalgo", 14, 3342, 3082841, 0}, //
-        {"Jalisco", 15, 26862, 8348151, 0}, //
-        {"Michoacan", 16, 6607, 4748846, 0}, //
-        {"Morelos", 17, 2852, 1971520, 0}, //
-        {"Nayarit", 18, 283, 1235456, 0}, //
-        {"Nuevo Leon", 19, 53072, 5784442, 0}, //
-        {"Oaxaca", 20, 1279, 4132148, 0}, //
-        {"Puebla", 21, 19841, 6583278, 0}, //
-        {"Queretaro", 22, 16713, 2368467, 0}, //
-        {"Quintana Roo", 23, 65, 1857985, 0}, //exportaciones = 65.4
-        {"San Luis Potosi", 24, 17801, 2822255, 0}, //
-        {"Sinaloa", 25, 2949, 3026943, 0}, //
-        {"Sonora", 26, 23866, 2944840, 0}, //
-        {"Tabasco", 27, 11348, 2402598, 0}, //
-        {"Tamaulipas", 28, 0, 3527735, 0}, //exportaciones no dadas (buscar)
-        {"Tlaxcala", 29, 2177, 1342977, 0}, //
-        {"Veracruz", 30, 8822, 8062579, 0}, //exportaciones no dadas
-        {"Yucatan", 31, 1646, 2320898, 0}, //
-        {"Zacatecas", 32, 3585, 1622138, 0} //
-    };
+    vector<Estado> estados;
+    string archivoEntrada = "estados.txt";  //nombre archivo de texto datos de enttrada
+    string archivoSalida = "resultados.txt"; //archivo donde se guardaran los resultados
 
-    int opcion; //creacion de la var opcion para que el usuario seleccione el ordenamiento
+    //Leemos los datos desde el archivo
+    if (!leerDatosDesdeArchivo(archivoEntrada, estados)) {
+        return 1;  //Si no se pudo leer el archivo de entrada se slae
+    }
 
-    cout << "Selecciona el criterio para ordenar:\n"; //instrucciones
-    cout << "1. Produccion Economica\n"; //PE
-    cout << "2. Poblacion\n"; // Poblacion
-    cout << "3. Sector\n"; //sectores
-    cout << "Elige una opcion (1-3): "; //eleccion
-    cin >> opcion; //se guarda la var opcion
+    int opcion;
+    //menu opciones
+    cout << "Selecciona una opción:\n";
+    cout << "1. Ordenar por Producción Económica\n";
+    cout << "2. Ordenar por Población\n";
+    cout << "3. Ordenar por Sector\n";
+    cout << "4. Calcular la Media\n";
+    cout << "5. Calcular la Mediana\n";
+    cout << "6. Calcular la Moda\n";
+    cout << "7. Calcular el Rango de Variación\n";
+    cout << "8. Calcular la Varianza\n";
+    cout << "9. Calcular la Desviación Estándar\n";
+    cout << "10. Calcular el Coeficiente de Variación\n";
+    cout << "Elige una opción (1-10): ";
+    cin >> opcion;
 
-    //para ordenar de acuerdo a opcion seleccionada
-    switch (opcion) { //utilizamos switch para que sea mas rapido
-        case 1: //caso 1 PE
-            sort(estados.begin(), estados.end(), compararProduccionEconomica); //utilizando sort y la funcion de compararPorProduccionEconomica
+    double resultado = 0;
+    //ejecutamos seleccion con swicth (por faiclidad)
+    switch (opcion) {
+        case 1:
+            sort(estados.begin(), estados.end(), compararPorProduccionEconomica);
             break;
-        case 2: //caso 3 poblacion
-            sort(estados.begin(), estados.end(), compararPoblacion); //utilizando sort y la funcion de compararPorPoblacion
+        case 2:
+            sort(estados.begin(), estados.end(), compararPorPoblacion);
             break;
-        case 3://caso 2 sector
-            sort(estados.begin(), estados.end(), compararSector);//utilizando sort y la funcion de compararPorSector
+        case 3:
+            sort(estados.begin(), estados.end(), compararPorSector);
             break;
-        default: //sino
-            cout << "Opcion no valida." << std::endl; //opcion no valida
+        case 4:
+            resultado = calcularMedia(estados);
+            break;
+        case 5:
+            resultado = calcularMediana(estados);
+            break;
+        case 6:
+            resultado = calcularModa(estados);
+            break;
+        case 7:
+            resultado = calcularRango(estados);
+            break;
+        case 8:
+            resultado = calcularVarianza(estados);
+            break;
+        case 9:
+            resultado = calcularDesviacionEstandar(estados);
+            break;
+        case 10:
+            resultado = calcularCoeficienteVariacion(estados);
+            break;
+        default:
+            cout << "Opción no válida." << endl;
             return 1;
     }
 
-    //mostrar los datos ya ordenados
-    cout << "\nDatos ordenados:\n\n";
+    //Guardamos resultados en archivo
+    guardarResultados(archivoSalida, estados, opcion, resultado);
+
+    //mostrar datos ordenados (si fue una opcion deordenamiento)
+    cout << "\nDatos ordenados:\n";
     for (const auto& estado : estados) {
-        estado.imprimir();
-        }
+        estado.imprimir(cout);  // Imprimimos en consola (solo para comprobar)
+    }
+
+    return 0;
 }
+
 
