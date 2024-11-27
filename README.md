@@ -10,7 +10,7 @@ Para este primer avance, utilicé la función sort para ordanarlos datos en los 
 Utilice un vector que tiene todos los estados de la republica con sus datos (necesito revisar y confirmar parte de la informacion que encontre en linea especialmente la parte de los sectores a los que se encarga cada estado por lo que no lo aplique ente avance), tiene el algoritmo de ordenamiento (Quick sort debido a que es eficiente para grandes conjuntos de datos y su rendimiento promedio es de O(nlogn)), y las opciones de las que se puede elegir (planeo agregarle mas opciones). Otra modificacion que quiero hacer es solo mostrar el estado y el dato solicitado en vez de toda la linea de datos.
 
 ## Descripción del avance 2
-Para el segundo avance, se agrego más opciones para consultar información estadística (media, mediana, moda, etc.) y mejorar la interfaz de usuario para hacerla más interactiva y amigable. Además, se mejorará la visualización de los datos, mostrando solo la información más relevante según la opción seleccionada.
+Para este segundo avance se eliminó el programa de ordenamiento Quick Sort y se utilizó un programa de Sort para acomodar los estados con su respectivo main. A su vez se agregó la función de leer mediante un archivo de texto (estados.txt) los datos que se desean analizar en el programa por lo que se eliminó el vector que contenía la información.
 
 ### Cambios sobre el primer avance
 ##### Cambio 1: Implementación de QuickSort
@@ -19,7 +19,7 @@ Razón: El algoritmo QuickSort fue implementado en el archivo EstadosQuickSort.h
 Razón: Se incluyeron opciones para calcular estadísticas como la media, mediana, moda, etc., lo cual permite un análisis más profundo de los datos económicos de los estados.
 
 ## Descripción del avance 3
-El tercer avance consistió en la optimización del programa mediante la incorporación de más funciones para ordenar los datos por diferentes criterios y la mejora en la interacción con el usuario, brindando una mejor experiencia al seleccionar las opciones.
+Para este último avance se agregaron las opciones de operaciones de análisis de datos con sus respectivas funciones y se modifico el codigo para que este enviará o imprimiera los resultados del programa a un archivo txt (resultados.txt), también para facilitar el programa se realizó todo dentro de un mismo archivo. 
 
 ### Cambios sobre el segundo avance
 ##### Cambio 1: Mejora en la presentación de resultados
@@ -28,7 +28,7 @@ Razón: Se planea mostrar solo los datos solicitados, evitando sobrecargar la sa
 Razón: Se agregará una opción para exportar los resultados a un archivo de texto, lo que permitirá guardar los resultados para su posterior análisis.
 
 ## Entrega final
-La entrega final incluirá una versión optimizada del programa con las opciones de ordenamiento y estadísticas completamente implementadas. Además, se mejorará la interacción con el usuario y la presentación de los resultados tanto en la consola como en el archivo de salida.
+La entrega final incluirá una versión optimizada del programa con las opciones de ordenamiento y estadísticas completamente implementadas. Además, se mejorará la interacción con el usuario y la presentación de los resultados tanto en la consola como en el archivo de salida. Además se implementará el READ ME de manera apropiada.
 
 ### Cambios sobre el tercer avance
 #### Cambio 1: Mejora en el manejo de archivos
@@ -132,6 +132,19 @@ Las otras operaciones estadísticas tienen una complejidad de O(n).
 Por lo tanto, la complejidad final del programa es dominada por las operaciones de ordenamiento y será O(n log n) en el caso general.
 
 
+
+# Videos
+## Estrucutra lineal
+### Drive: 
+### YouTube
+
+## Estructura no lineal
+### Drive: 
+### YouTube
+
+## Algoritmo de ordanamiento
+### Drive: 
+### YouTube
 
 
 ## Referencias:
