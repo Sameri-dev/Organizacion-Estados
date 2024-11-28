@@ -138,19 +138,19 @@ Por lo tanto, la complejidad final del programa es dominada por las operaciones 
 ### Drive: 
 https://drive.google.com/drive/folders/1n9n4ZLc3LdTFop5N4oa_GZv2Wu46EZLa?usp=sharing
 ### YouTube
-https://youtu.be/116iZSR4cak
+https://youtu.be/5hHCugw0-xg
 
 ## Estructura no lineal
 ### Drive: 
 https://drive.google.com/drive/folders/1FEyCXakscVu-bkTf8iVI3awJOy_ad5nu?usp=sharing
 ### YouTube
-https://youtu.be/CoI-SLfbH-o
+https://youtu.be/jdwTLRktQ9w
 
 ## Algoritmo de ordenamiento
 ### Drive: 
 https://drive.google.com/drive/folders/1MRtbpOepUUJH4xgmMbyiTFJfpz8FGXy6?usp=sharing
 ### YouTube
-https://youtu.be/uR8qUBAs2TA
+https://youtu.be/QivnbOciiGk
 
 
 ## Referencias:
